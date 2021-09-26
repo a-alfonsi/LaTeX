@@ -4,7 +4,9 @@ Framework that automates the creation of pdf slides (using Beamer) containing al
 The obtained slides have been used to give weekly presentations at CERN to the ATLAS Collaboration, which led to the final publication of the paper titled _[A search for the dimuon decay of the Standard
 Model Higgs boson with the ATLAS detector](https://arxiv.org/pdf/2007.07830.pdf)_
 
-_Requires TeX Live 2017, Python3.x and Pytex._
+_Written to be run in the CERN LXPLUS cluster, can be easily readapted.
+Requires TeX Live 2017, Python3.x and Pytex._
+
 
 &nbsp;
 
