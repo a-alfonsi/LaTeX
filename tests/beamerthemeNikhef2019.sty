@@ -1,0 +1,215 @@
+\RequirePackage{tikz}
+\usepackage[UKenglish]{datetime}
+% \usepackage[en-GB,showdow=false]{datetime2}
+% \DTMlangsetup[en-GB]{ord=raise,monthyearsep={,\space}}
+
+\newcommand\firaligth{\fontfamily[ultralight]{FiraSans}\selectfont}
+
+
+\usepackage[absolute,overlay]{textpos}
+% To see textboxes
+% \usepackage[absolute,overlay,showboxes]{textpos}
+% \textblockrulecolour{red}
+
+\DeclareOption{setfont}{
+  \setmainfont[NormalFont={Fira Sans Light Italic OT},%
+               BoldFont={Fira Sans OT},%
+               BoldItalicFont={Fira Sans Italic OT}]%
+              {Fira Sans Light OT}%
+  \setsansfont[ItalicFont={Fira Sans Light Italic OT},%
+               BoldFont={Fira Sans OT},%
+               BoldItalicFont={Fira Sans Italic OT}]%
+              {Fira Sans Light OT}%
+	\setmonofont[BoldFont={Fira Mono Medium}]{Fira Mono}%
+	\setmonofont[BoldFont={Fira Mono Medium OT}]{Fira Mono OT}%
+}
+
+
+
+  % \AtBeginEnvironment{tabular}{%
+  %   \addfontfeature{Numbers={Monospaced}}%
+  %  }
+
+
+
+% \DeclareOptionBeamer{sidebarwidth}{10cm}
+% \DeclareOptionBeamer{sidebarleft}{\def\beamer@sidebarside{left}}
+% \DeclareOptionBeamer{sidebarright}{\def\beamer@sidebarside{right}}
+% \ExecuteOptionsBeamer{sidebarleft}
+
+
+
+
+
+\ProcessOptions
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% THEME COLOURS, FONTS, ITEMS STYLE
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% DEFINE COLOURS
+\definecolor{NIKHEFyellow}{RGB}{222,209,138}
+\definecolor{NIKHEFred}{RGB}{186,52,59}
+\definecolor{NIKHEFpurple}{RGB}{94,40,104}
+\definecolor{NIKHEFblue}{RGB}{74,168,186}
+\definecolor{NIKHEFgreen}{RGB}{60,196,39}
+\definecolor{NIKHEFgray}{RGB}{191,191,191}
+\definecolor{NIKHEFdarkgray}{RGB}{79,79,79}
+
+\definecolor{MedianBrown}{RGB}{119,95,85}
+\definecolor{MedianLightBrown}{RGB}{235,221,195}
+\definecolor{MedianLightBlue}{RGB}{148,182,210}
+\definecolor{MedianOrange}{RGB}{221,128,71}
+\definecolor{MedianLightOrange}{RGB}{216,178,92}
+\definecolor{MedianUltraLightOrange}{RGB}{245,236,215}
+
+% RESET MARGINS
+\setbeamersize{text margin left=1.7cm,text margin right=1cm} 
+% \addtolength{\headsep}{4.6cm}
+
+% DEFINE ELEMENTS COLOURS
+\setbeamercolor*{title page header}{fg=white}
+\setbeamercolor*{subtitle page header}{fg=NIKHEFdarkgray}
+\setbeamercolor*{title}{fg=black}
+\setbeamercolor*{author}{fg=black}
+\setbeamercolor*{date}{fg=NIKHEFdarkgray}
+\setbeamercolor*{footline}{fg=NIKHEFgray}
+\setbeamercolor*{item}{fg=NIKHEFblue}
+\setbeamercolor*{frametitle}{fg=black}
+\setbeamercolor*{block title}{fg=NIKHEFred, bg=white}
+\setbeamercolor*{block title example}{fg=NIKHEFblue, bg=white}
+\setbeamercolor*{block body}{bg=white}
+\setbeamercolor*{block body example}{bg=white}
+\setbeamercolor*{section in toc}{fg=black}
+\setbeamercolor*{section page}{fg=white}
+
+% DEFINE BEAMER FONTS
+\setbeamerfont{section page}{size=\LARGE}
+\setbeamerfont{title}{size=\LARGE}
+\setbeamerfont{subtitle}{size=\normalsize,series=\normalfont}
+\setbeamerfont{author}{size=\large}
+\setbeamerfont{date}{size=\large}
+\setbeamerfont{footline}{size=\small}
+
+% DEFINE BEAMER ITEMS
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{items}[square]
+\setbeamertemplate{itemize item}{\tikz{\draw[color=NIKHEFblue, semithick] rectangle(.2,.2);}}
+\setbeamertemplate{itemize subitem}{\tikz{\draw[color=NIKHEFgreen, ultra thick] rectangle(.2,.2);}}
+\setbeamertemplate{sections/subsections in toc}[square]
+
+\newenvironment{xplainframe}{\bgroup\setbeamertemplate{background}{}\begin{frame}[plain]}{\end{frame}\egroup}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% PAGES LAYOUT
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% DEFINE PAGES BACKGROUNDS
+\setbeamertemplate{background}{
+  \begin{tikzpicture}
+  \useasboundingbox (0,0) rectangle(\the\paperwidth,\the\paperheight);
+  % Content page
+  \ifnum\thepage>1\relax
+	  % \fill[color=NIKHEFred] (0,8) rectangle(0.8,8.1);
+	  % \fill[color=MedianLightBlue] (0.9,8) rectangle(\the\paperwidth, 8.1);
+	  \fill[color=black] (0.,0.) rectangle (0.7,\the\paperheight);
+	  \fill[color=NIKHEFdarkgray] (0.,\the\paperheight-0.3cm) rectangle (0.7,\the\paperheight-1cm);
+  % Title page
+  \else
+  	% Black title box
+	  \fill[color=black] (0,6) rectangle (\the\paperwidth,\the\paperheight-0.7cm);
+	  % Nikhef colorful line
+	  \fill[color=NIKHEFred] (0,0.35) rectangle(\the\paperwidth/4,0.5);
+	  \fill[color=NIKHEFyellow] (\the\paperwidth/4,0.35) rectangle(\the\paperwidth/2,0.5); 
+	  \fill[color=NIKHEFpurple] (\the\paperwidth/2,0.35) rectangle(3*\the\paperwidth/4,0.5); 
+	  \fill[color=NIKHEFblue] (3*\the\paperwidth/4,0.35) rectangle(\the\paperwidth,0.5); 
+		% Institute bar
+		% \fill[color=gray] (3*\the\paperwidth/4,5.3) rectangle(3*\the\paperwidth/4+0.05cm,3.);  
+  \fi
+  \end{tikzpicture}
+}
+
+% DEFINE TITLE PAGE CONTENT
+% Title page
+\setbeamertemplate{title page}{
+	% Title
+	\begin{textblock*}{\textwidth}(1.3cm,1.5cm)
+    \begin{beamercolorbox}[wd=\dimexpr\textwidth\relax]{title page header}
+      \usebeamerfont{title}\usebeamercolor{title}\centering\inserttitle%
+    \end{beamercolorbox}%
+  \end{textblock*}
+	% Subtitle
+	\begin{textblock*}{\textwidth}(1.3cm,6.5cm)
+    \begin{beamercolorbox}[wd=\dimexpr\textwidth\relax]{subtitle page header}
+      \usebeamerfont{subtitle}\usebeamercolor{subtitle}\centering\insertsubtitle%
+    \end{beamercolorbox}%
+  \end{textblock*}
+  % Date
+  \begin{textblock*}{\dimexpr\paperwidth/4}(\dimexpr\paperwidth*3/8\relax,7cm)
+		\begin{beamercolorbox}{date}
+	      \usebeamerfont{date}\centering\insertdate%
+	  \end{beamercolorbox}
+  \end{textblock*}
+  % Author
+  \begin{textblock*}{\dimexpr\textwidth-2.3cm\relax}(2.7cm,4.5cm)
+	  \begin{beamercolorbox}{author}
+	    \usebeamerfont{author}\insertauthor%
+   	\end{beamercolorbox}
+  \end{textblock*}
+}
+% Section frame
+\newcommand{\sectionframe}{
+	\setbeamertemplate{background}{
+		\begin{tikzpicture}
+			\useasboundingbox (0,0) rectangle(\the\paperwidth,\the\paperheight);
+			\fill[color=MedianOrange] (0,6) rectangle (1.5, 7);
+			\fill[color=MedianLightBlue] (1.6, 6) rectangle (\the\paperwidth, 7);
+		\end{tikzpicture}
+	}
+	\frame{\sectionpage}
+}
+% Section page
+\setbeamertemplate{section page}{
+	\begin{textblock*}{12cm}(0.8cm,-0.9cm)
+		\begin{beamercolorbox}{section page}
+			\insertsectionhead
+		\end{beamercolorbox}
+	\end{textblock*}
+}
+% Frame title
+\setbeamertemplate{frametitle}{
+	% Slide number
+	\begin{textblock*}{\textwidth}(0.27cm,0.53cm)
+		\begin{beamercolorbox}{pagenumber}
+			\normalsize\textcolor{NIKHEFgray}
+			{\fontfamily{lmss}\selectfont 
+				\textbf{\insertframenumber}
+			}
+		\end{beamercolorbox}
+	\end{textblock*}
+	% Title
+	\begin{textblock*}{\textwidth}(1.cm,0.46cm)
+		\begin{beamercolorbox}{frametitle}
+			\insertframetitle
+		\end{beamercolorbox}
+	\end{textblock*}
+	\vspace{0.8cm}	
+	\centering
+}
+% Sidebar (yeah that's a footline masked as a sidebar)
+\setbeamertemplate{footline}{
+  \ifnum\thepage>1\relax
+  	% Nikhef logo
+  	\begin{textblock*}{1.7cm}(0.cm,8.8cm)
+  	  \includegraphics[width=0.7cm]{nikhefLogo.png}%
+  	\end{textblock*}
+  	% Footline
+  	\begin{textblock*}{1.7cm}(0.2cm,1.5cm)
+  	  \begin{beamercolorbox}[wd=1.7cm]{footline}
+				\rotatebox{90}{\usebeamerfont{footline}\textsc{\inserttitle}}%
+  	  \end{beamercolorbox}%
+  	\end{textblock*}
+  \fi
+}

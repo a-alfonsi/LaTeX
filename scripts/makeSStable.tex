@@ -1,0 +1,135 @@
+\documentclass[xcolor={x11names}]{beamer}
+\usepackage{graphicx}
+\usepackage{mathtools}
+\usepackage{amsmath}
+\usepackage[T1]{fontenc}
+\usepackage{xcolor}
+\usepackage{mwe}
+\usepackage{pifont}
+\usepackage{caption}
+\usepackage{pythontex}
+\usepackage{tikz}
+\usepackage{pgfplots}\pgfplotsset{compat=1.9} 
+\usepackage{pgfplotstable}
+\usepackage{siunitx}
+\sisetup{
+    output-decimal-marker = {,},
+    per-mode = symbol,
+    group-separator = {.},
+    output-complex-root = \ensuremath{\mathrm{j}},
+    binary-units,
+    retain-unity-mantissa = false,
+    retain-explicit-plus = true,
+}
+\usepackage{filecontents}
+\usepackage[utf8]{inputenc} %unicode support
+\usepackage{lmodern}
+\usepackage{booktabs,colortbl,array}
+\pgfplotsset{compat=1.8}
+
+% Command to catch environment variables
+\usepackage{catchfile}
+\newcommand{\getenvv}[2][]{%
+  \CatchFileEdef{\temp}{"|kpsewhich --var-value #2"}{\endlinechar=-1}%
+  \if\relax\detokenize{#1}\relax\temp\else\let#1\temp\fi}
+% Catch DIRTEX variable
+\getenvv[\DIRTEX]{DIRTEX}
+
+% Commands to load beamer theme from different folder
+\makeatletter
+  \def\beamer@calltheme#1#2#3{%
+    \def\beamer@themelist{#2}
+    \@for\beamer@themename:=\beamer@themelist\do
+    {\usepackage[{#1}]{\beamer@themelocation/#3\beamer@themename}}}
+  \def\usefolder#1{
+    \def\beamer@themelocation{#1}
+  }
+  \def\beamer@themelocation{}
+
+\usefolder{\DIRTEX/templates/beamer_Nikhef2019clean}
+\usetheme{Nikhef2019clean}
+
+\definecolor{lightGray}{gray}{0.90}
+
+\usepackage[textfont={scriptsize}]{caption}
+\setlength\abovecaptionskip{-7pt}
+
+
+\begin{pycode}
+import os
+import sys
+sys.path.insert(0, os.environ["DIRTEX"]+"/scripts")
+from latexFunctions import *
+from spuriousSignalFunctions import *
+\end{pycode}
+
+
+\begin{document}
+
+% TABLE
+\begin{pycode}
+
+% tablesDir = os.environ["DIRWORK"]+"ANALYSIS/FITTING_Hmumu/Hmumu_bkgModelStudies/scripts/tableAndConfig_Maker/TableMaker_output/"
+tablesDir = ""
+inpTable = "\inputTable"
+tables = tablesDir+inpTable
+
+print(r'\begin{frame}[fragile,shrink=40]{Table}')
+print(r'\vspace{1cm}')
+print(r'\pgfplotstabletypeset[')
+print(r'    header=true,')
+print(r'    every head row/.append style={')
+print(r'        after row=\midrule')
+print(r'    },')  
+print(r'    every even row/.style={before row={\rowcolor{lightGray}}},')  
+print(r'    comment chars={\#},')
+print(r'    precision=2,')
+print(r'    fixed zerofill,')
+print(r'    ignore chars={[,],\%},')
+print(r'    columns/Category/.style={')
+print(r'        column name=\textcolor{Red3}{\textbf{Category}},')
+print(r'        column type=l,')
+print(r'        postproc cell content/.append style={')
+print(r'            /pgfplots/table/@cell content/.add={\color{DeepSkyBlue3}$\bf}{$},')
+print(r'        },')
+print(r'        string type},')
+print(r'    columns/selectedPdf/.style={')
+print(r'        column name = \textcolor{Red3}{\textbf{SelectedPdf}},')
+print(r'        column type=l,')
+print(r'        string type,')
+print(r'        postproc cell content/.code={')
+print(r'            \pgfplotsutilstrreplace{_}{\_}{##1}')
+print(r'            \pgfkeyslet{/pgfplots/table/@cell content}\pgfplotsretval')
+print(r'        },')
+print(r'    },')
+print(r'    columns/max(S/dS)/.style={')
+print(r'        dec sep align,')
+print(r'        column name=\textcolor{Red3}{\textbf{(S/dS)$\sb{max}$}},')
+print(r'    },')
+print(r'    columns/max(1sigmaS/dS)/.style={')
+print(r'        column name=\textcolor{Red3}{\textbf{((S$\pm1\sigma$)/dS)$\sb{max}$}},')
+print(r'        dec sep align')
+print(r'    },')
+print(r'    columns/max(S)/.style={')
+print(r'        column name=\textcolor{Red3}{\textbf{     S$\sb{max}$}},')
+print(r'        dec sep align')
+print(r'    },')
+print(r'    columns/nPars/.style={')
+print(r'        column name=\textcolor{Red3}{\textbf{N$\sb{par}$}},')
+print(r'        precision=0,')
+print(r'        column type=c')
+print(r'    },')
+print(r'    columns/chi2/ndof/.style={')
+print(r'        column name=\textcolor{Red3}{\textbf{$\chi^2$/dof}},')
+print(r'        column type=c,')
+print(r'    },')
+print(r'    columns/Prob(chi2)/.style={')
+print(r'        column name=\textcolor{Red3}{\textbf{P($\chi^2$)}},')
+print(r'        dec sep align')
+print(r'    }')
+print(r']')
+print(r'{%s}' % tables)
+print(r'\end{frame}')
+\end{pycode}
+
+\end{document}

@@ -1,0 +1,199 @@
+\documentclass[xcolor={x11names}]{beamer}
+\usepackage{graphicx}
+ \usepackage{mathtools}
+ \usepackage{amsmath}
+% \usepackage(/afs/cern.ch/work/a/aalfonsi/LaTeX/templates/beamerthemeNikhef2019.sty)
+% \usepackage[T1]{fontenc}
+\catcode`\_=12
+\usepackage{xcolor}
+\usepackage{mwe}
+\usepackage{pifont}
+\usepackage{caption}
+\usepackage{pythontex}
+\usepackage{tikz}
+\usepackage{pgfplots}\pgfplotsset{compat=1.9} 
+\usepackage{pgfplotstable}
+\usepackage{siunitx}
+\sisetup{
+    output-decimal-marker = {,},
+    per-mode = symbol,
+    group-separator = {.},
+    output-complex-root = \ensuremath{\mathrm{j}},
+    binary-units,
+    retain-unity-mantissa = false,
+    retain-explicit-plus = true,
+}
+\usepackage{filecontents}
+\usepackage[utf8]{inputenc} %unicode support
+\usepackage{lmodern}
+\usepackage{booktabs,colortbl,array}
+\pgfplotsset{compat=1.8}
+
+\usetheme{Nikhef2019}
+
+% \usefonttheme[onlymath]{serif}
+
+\definecolor{lightGray}{gray}{0.90}
+
+\usepackage[textfont={scriptsize}]{caption}
+\setlength\abovecaptionskip{-7pt}
+
+% \newcommand{\lpipe}{\;\rule[-0.4ex]{0.8pt}{2.3ex} \;}
+
+% \def\img#1{%
+% \begin{figure}
+% \includegraphics[width=\linewidth, height=.2\textheight, keepaspectratio]%
+% {#1}
+% \end{figure}}
+
+\title{\textbf{$H\to\mu\mu$ Background study}}
+\subtitle{$H\sb{\mu\mu}$ Analysis Meeting}
+\author{A. Alfonsi, L. Brenner, C. Burgard, F. Cerutti, W. Verkerke, H. Yang, J. Chan, W. Guan, S. Sun, A. Wang, S.L. Wu, C. Zhou}
+
+\pyc{from latexFunctions import *}
+\pyc{from spuriousSignalFunctions import *}
+
+\begin{document}
+
+\frame{\maketitle}
+
+% \begin{frame}{Table of contents}
+%     \tableofcontents
+% \end{frame}
+
+\section{Intro}
+\begin{frame}[fragile,shrink=25]
+\frametitle{Tested pdfs}
+\begin{table}
+{
+\centering
+
+\begin{tabular}{l l c}
+\textcolor{Red3}{\textbf{Function}} & \textcolor{Red3}{\textbf{Expression}} & \textcolor{Red3}{\textbf{nPar}} \\
+\midrule
+
+\textbf{DYxEpoly1}      &    $DY\sb {LS}\cdot exp(a\sb 1 m\sb {\mu\mu})                                                                                        $   &   1       \\
+\textbf{DYxEpoly2}      &    $DY\sb {LS}\cdot exp(a\sb 1 m\sb {\mu\mu} + a\sb 2m\sb {\mu\mu}^2)                                                                      $   &   2       \\
+\textbf{DYxEpoly3}      &    $DY\sb {LS}\cdot exp(a\sb 1 m\sb {\mu\mu} + a\sb 2m\sb {\mu\mu}^2 + a\sb 3m\sb {\mu\mu}^3)                                                    $   &   3       \\
+\textbf{DYxPoly1 }      &    $DY\sb {LS}\cdot(1+a\sb 1 m\sb {\mu\mu})                                                                                          $   &   1       \\
+\textbf{DYxPoly2 }      &    $DY\sb {LS}\cdot(1+a\sb 1 m\sb {\mu\mu} + a\sb 2m\sb {\mu\mu}^2)                                                                        $   &   2       \\
+\textbf{DYxPoly3 }      &    $DY\sb {LS}\cdot(1+a\sb 1 m\sb {\mu\mu} + a\sb 2m\sb {\mu\mu}^2 + a\sb 3m\sb {\mu\mu}^3)                                                      $   &   3       \\
+\textbf{DYxPower0}      &    $DY\sb {LS}\cdot pow(m\sb {\mu\mu}, a\sb 0)                                                                                       $   &   1       \\
+\textbf{DYxPower1}      &    $DY\sb {LS}\cdot pow(m\sb {\mu\mu}, a\sb 0 + a\sb 1 m\sb {\mu\mu})                                                                      $   &   2       \\
+\textbf{DYxPower2}      &    $DY\sb {LS}\cdot pow(m\sb {\mu\mu}, a\sb 0 + a\sb 1 m\sb {\mu\mu}+a\sb 2 m\sb {\mu\mu}^2 )                                                    $   &   3       \\
+\textbf{DYxPower3}      &    $DY\sb {LS}\cdot pow(m\sb {\mu\mu}, a\sb 0 + a\sb 1 m\sb {\mu\mu}+a\sb 2 m\sb {\mu\mu}^2+a\sb 3 m\sb {\mu\mu}^3 )                                   $   &   4       \\
+\textbf{BWxEpoly1}      &    $\frac{exp(a\sb 1 m\sb {\mu\mu}}{(m\sb Z -m\sb {\mu\mu})^2 + (\Gamma\sb Z/2)^2}                                                         $   &   1       \\
+\textbf{BWxEpoly2}      &    $\frac{exp(a\sb 1 m\sb {\mu\mu} + a\sb 2m\sb {\mu\mu}^2)}{(m\sb Z -m\sb {\mu\mu})^2 + (\Gamma\sb Z/2)^2}                                      $   &   2       \\
+\textbf{BWxEpoly3}      &    $\frac{exp(a\sb 1 m\sb {\mu\mu} + a\sb 2m\sb {\mu\mu}^2) + + a\sb 3m\sb {\mu\mu}^3)}{(m\sb Z -m\sb {\mu\mu})^2 + (\Gamma\sb Z/2)^2}                 $   &   3       \\
+\textbf{BWxPoly1 }      &    $\frac{1+a\sb 1 m\sb {\mu\mu}}{(m\sb Z -m\sb {\mu\mu})^2 + (\Gamma\sb Z/2)^2}                                                           $   &   1       \\
+\textbf{BWxPoly2 }      &    $\frac{1+a\sb 1 m\sb {\mu\mu} + a\sb 2m\sb {\mu\mu}^2}{(m\sb Z -m\sb {\mu\mu})^2 + (\Gamma\sb Z/2)^2}                                         $   &   2       \\
+\textbf{BWxPoly3 }      &    $\frac{1+a\sb 1 m\sb {\mu\mu} + a\sb 2m\sb {\mu\mu}^2 + a\sb 3m\sb {\mu\mu}^3}{(m\sb Z -m\sb {\mu\mu})^2 + (\Gamma\sb Z/2)^2}                       $   &   3       \\
+\textbf{BWxPower0}      &    $\frac{pow(m\sb {\mu\mu}, a\sb 1 )}{(m\sb Z -m\sb {\mu\mu})^2 + (\Gamma\sb Z/2)^2}                                                      $   &   1       \\
+\textbf{BWxPower1}      &    $\frac{pow(m\sb {\mu\mu}, a\sb 1 + a\sb 2 m\sb {\mu\mu})}{(m\sb Z -m\sb {\mu\mu})^2 + (\Gamma\sb Z/2)^2}                                      $   &   2       \\
+\textbf{BWxPower2}      &    $\frac{pow(m\sb {\mu\mu}, a\sb 1 + a\sb 2 m\sb {\mu\mu}+ a\sb 3 m\sb {\mu\mu}^2)}{(m\sb Z -m\sb {\mu\mu})^2 + (\Gamma\sb Z/2)^2}                    $   &   3       \\
+\textbf{BWxPower3}      &    $\frac{pow(m\sb {\mu\mu}, a\sb 1 + a\sb 2 m\sb {\mu\mu}+ a\sb 3 m\sb {\mu\mu}^2)+ a\sb 4 m\sb {\mu\mu}^3))}{(m\sb Z -m\sb {\mu\mu})^2 + (\Gamma\sb Z/2)^2}$   &   4       \\
+
+\end{tabular}
+}
+
+\end{table}
+
+\end{frame}
+
+
+% TABLES
+\section{Tables}
+\begin{pycode}
+
+tablesDir = "../../ANALYSIS/FITTING_Hmumu/Hmumu_bkgModelStudies/scripts/tableAndConfig_Maker/TableMaker_output/pdfSelection_BDTv18_3best_nounderscore/allCatResults--passSmin_"
+extension = ".txt"
+ranges = ["110-160", "110-200", "110-200", "115-160", "115-200", "115-250"]
+tables = [tablesDir+"110-160.txt",tablesDir+"110-200.txt", tablesDir+"110-250.txt",tablesDir+"115-160.txt",tablesDir+"115-200.txt",tablesDir+"115-250.txt"]
+
+for itable in range(len(tables)):
+    print(r'\begin{frame}[fragile,shrink=40]')
+    print(r'\frametitle{Selected pdfs: %s GeV}' % tables[itable].rsplit('.',2)[1].rsplit('_',1)[1])
+    print(r'\vspace{1cm}')
+    print(r'\pgfplotstabletypeset[')
+    print(r'    header=true,')
+    print(r'    every head row/.append style={')
+    print(r'        after row=\midrule')
+    print(r'    },')  
+    print(r'    every even row/.style={before row={\rowcolor{lightGray}}},')  
+    print(r'    comment chars={\#},')
+    print(r'    precision=2,')
+    print(r'    fixed zerofill,')
+    print(r'    ignore chars={[,],\%},')
+    print(r'    columns/Category/.style={')
+    print(r'        column name=\textcolor{Red3}{\textbf{Category}},')
+    print(r'        column type=l,')
+    print(r'        postproc cell content/.append style={')
+    print(r'            /pgfplots/table/@cell content/.add={\color{DeepSkyBlue3}$\bf}{$},')
+    print(r'        },')
+    print(r'        string type},')
+    print(r'    columns/selectedPdf/.style={')
+    print(r'        column name = \textcolor{Red3}{\textbf{SelectedPdf}},')
+    print(r'        column type=l,')
+    print(r'        string type,')
+    print(r'        postproc cell content/.code={')
+    print(r'            \pgfplotsutilstrreplace{_}{\_}{##1}')
+    print(r'            \pgfkeyslet{/pgfplots/table/@cell content}\pgfplotsretval')
+    print(r'        },')
+    print(r'    },')
+    print(r'    columns/max(S/dS)/.style={')
+    print(r'        dec sep align,')
+    print(r'        column name=\textcolor{Red3}{\textbf{(S/dS)$\sb{max}$}},')
+    print(r'    },')
+    print(r'    columns/max(1sigmaS/dS)/.style={')
+    print(r'        column name=\textcolor{Red3}{\textbf{((S$\pm1\sigma$)/dS)$\sb{max}$}},')
+    print(r'        dec sep align')
+    print(r'    },')
+    print(r'    columns/max(S)/.style={')
+    print(r'        column name=\textcolor{Red3}{\textbf{     S$\sb{max}$}},')
+    print(r'        dec sep align')
+    print(r'    },')
+    print(r'    columns/nPars/.style={')
+    print(r'        column name=\textcolor{Red3}{\textbf{N$\sb{par}$}},')
+    print(r'        precision=0,')
+    print(r'        column type=c')
+    print(r'    },')
+    print(r'    columns/chi2/ndof/.style={')
+    print(r'        column name=\textcolor{Red3}{\textbf{$\chi^2$/dof}},')
+    print(r'        column type=c,')
+    print(r'    },')
+    print(r'    columns/Prob(chi2)/.style={')
+    print(r'        column name=\textcolor{Red3}{\textbf{P($\chi^2$)}},')
+    print(r'        dec sep align')
+    print(r'    }')
+    print(r']')
+    print(r'{%s}' % tables[itable])
+    print(r'\end{frame}')
+
+\end{pycode}
+
+
+
+\section{Plots}
+\begin{pycode}
+outputsDir = "../../ANALYSIS/FITTING_Hmumu/Hmumu_bkgModelStudies/output/BDT_v18_2019-03-29/"
+
+outputs = [
+            outputsDir+"110-160/spuriousSig/",
+            outputsDir+"110-200/spuriousSig/", 
+            outputsDir+"110-250/spuriousSig/",
+            outputsDir+"115-160/spuriousSig/",
+            outputsDir+"115-200/spuriousSig/",
+            outputsDir+"115-250/spuriousSig/"
+          ]
+
+for ioutput in range(len(outputs)):
+    print(r'\section{%s}' % outputs[ioutput].rsplit('/',3)[1])
+    print(r'\begin{frame}')
+    print(r'\textbf{%s GeV}' % outputs[ioutput].rsplit('/',3)[1])
+    print(r'\end{frame}')
+    grabPdfs(outputs[ioutput])
+\end{pycode}
+
+% \error
+
+\end{document}
