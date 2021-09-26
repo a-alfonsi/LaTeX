@@ -1,5 +1,11 @@
 # LaTeX utilities
 
+Framework that automates the creation of pdf slides (using Beamer) containing all the plots produced in the Hμμ analysis, reducing hours of daily workload to minutes.
+The obtained slides have been used to give weekly presentations at CERN to the ATLAS Collaboration, which led to the final publication of the paper titled _[A search for the dimuon decay of the Standard
+Model Higgs boson with the ATLAS detector](https://arxiv.org/pdf/2007.07830.pdf)_
+
+_Requires TeX Live 2017, Python3.x and Pytex._
+
 &nbsp;
 
 ## :triangular_flag_on_post: SETUP
